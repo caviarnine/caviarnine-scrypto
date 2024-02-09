@@ -1,0 +1,22 @@
+CALL_METHOD 
+    Address("${ACCOUNT}") 
+    "withdraw_non_fungibles" 
+    Address("${LIQUIDITY_RECEIPT}")
+    Array<NonFungibleLocalId>(NonFungibleLocalId("${LIQUIDITY_RECEIPT_ID}"))
+;
+TAKE_ALL_FROM_WORKTOP 
+    Address("${LIQUIDITY_RECEIPT}") 
+    Bucket("receipt")
+;
+
+CALL_METHOD 
+    Address("${QUANTASWAP}") 
+    "remove_liquidity" 
+    Bucket("receipt")
+;
+
+CALL_METHOD 
+    Address("${ACCOUNT}") 
+    "deposit_batch" 
+    Expression("ENTIRE_WORKTOP")
+;

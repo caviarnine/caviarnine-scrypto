@@ -1,0 +1,66 @@
+CALL_METHOD
+    Address("${ACCOUNT}")
+    "withdraw"
+    Address("${TOKEN_X}")
+    Decimal("${AMOUNT_X}")
+;
+CALL_METHOD
+    Address("${ACCOUNT}")
+    "withdraw"
+    Address("${TOKEN_Y}")
+    Decimal("${AMOUNT_Y}")
+;
+TAKE_ALL_FROM_WORKTOP
+    Address("${TOKEN_X}")
+    Bucket("tokens_x")
+;
+TAKE_ALL_FROM_WORKTOP
+    Address("${TOKEN_Y}")
+    Bucket("tokens_y")
+;
+
+ALLOCATE_GLOBAL_ADDRESS
+    Address("${QUANTASWAP_PACKAGE}")
+    "QuantaSwap"
+    AddressReservation("pool_reservation")
+    NamedAddress("pool_address")
+;
+CALL_METHOD
+    Address("${QUANTASWAP_FACTORY}")
+    "new_pool"
+    Address("${TOKEN_X}")
+    Address("${TOKEN_Y}")
+    ${BIN_SPAN}u32
+    Enum<1u8>(
+        AddressReservation("pool_reservation")
+    )
+;
+CALL_METHOD
+    NamedAddress("pool_address")
+    "add_liquidity"
+    Bucket("tokens_x")
+    Bucket("tokens_y")
+    Array<Tuple>(
+        Tuple(
+            ${TICK_0}u32,
+            Decimal("${AMOUNT_X_0}"),
+            Decimal("${AMOUNT_Y_0}")
+        ),
+        Tuple(
+            ${TICK_1}u32,
+            Decimal("${AMOUNT_X_1}"),
+            Decimal("${AMOUNT_Y_1}")
+        ),
+        Tuple(
+            ${TICK_2}u32,
+            Decimal("${AMOUNT_X_2}"),
+            Decimal("${AMOUNT_Y_2}")
+        )
+    )
+;
+
+CALL_METHOD
+    Address("${ACCOUNT}")
+    "deposit_batch"
+    Expression("ENTIRE_WORKTOP")
+;

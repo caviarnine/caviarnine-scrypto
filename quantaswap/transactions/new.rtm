@@ -1,0 +1,12 @@
+CALL_FUNCTION 
+    Address("${PACKAGE}") 
+    "QuantaSwap" 
+    "new" 
+    Address("${ADMIN_BADGE}")
+    "${SYMBOL_X}"
+    "${SYMBOL_Y}"
+    Address("${TOKEN_X}") 
+    Address("${TOKEN_Y}") 
+    ${BIN_SPAN}u32 
+    Enum<0u8>()
+;

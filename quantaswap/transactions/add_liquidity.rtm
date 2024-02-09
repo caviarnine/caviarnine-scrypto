@@ -1,0 +1,50 @@
+CALL_METHOD 
+    Address("${ACCOUNT}") 
+    "withdraw" 
+    Address("${TOKEN_X}")
+    Decimal("${AMOUNT_X}")
+;
+TAKE_ALL_FROM_WORKTOP
+    Address("${TOKEN_X}") 
+    Bucket("tokens_x")
+;
+CALL_METHOD 
+    Address("${ACCOUNT}") 
+    "withdraw" 
+    Address("${TOKEN_Y}")
+    Decimal("${AMOUNT_Y}")
+;
+TAKE_ALL_FROM_WORKTOP
+    Address("${TOKEN_Y}") 
+    Bucket("tokens_y")
+;
+
+CALL_METHOD 
+    Address("${QUANTASWAP}") 
+    "add_liquidity" 
+    Bucket("tokens_x")
+    Bucket("tokens_y")
+    Array<Tuple>(
+        Tuple(
+            ${TICK_0}u32,
+            Decimal("${AMOUNT_X_0}"),
+            Decimal("${AMOUNT_Y_0}")
+        ),
+        Tuple(
+            ${TICK_1}u32,
+            Decimal("${AMOUNT_X_1}"),
+            Decimal("${AMOUNT_Y_1}")
+        ),
+        Tuple(
+            ${TICK_2}u32,
+            Decimal("${AMOUNT_X_2}"),
+            Decimal("${AMOUNT_Y_2}")
+        )
+    )
+;
+
+CALL_METHOD 
+    Address("${ACCOUNT}") 
+    "deposit_batch" 
+    Expression("ENTIRE_WORKTOP")
+;

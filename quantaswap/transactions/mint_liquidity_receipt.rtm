@@ -1,0 +1,10 @@
+CALL_METHOD 
+    Address("${QUANTASWAP}") 
+    "mint_liquidity_receipt"
+;
+
+CALL_METHOD 
+    Address("${ACCOUNT}") 
+    "deposit_batch" 
+    Expression("ENTIRE_WORKTOP")
+;

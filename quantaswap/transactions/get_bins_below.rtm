@@ -1,0 +1,7 @@
+CALL_METHOD 
+    Address("${QUANTASWAP}") 
+    "get_bins_below" 
+    None
+    None
+    Some(${NUMBER}u32)
+;
