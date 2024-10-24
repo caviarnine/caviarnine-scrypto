@@ -1,0 +1,25 @@
+CALL_METHOD
+    Address("${ACCOUNT}")
+    "withdraw"
+    Address("${TOKEN}")
+    Decimal("${AMOUNT}")
+;
+TAKE_ALL_FROM_WORKTOP
+    Address("${TOKEN}")
+    Bucket("tokens")
+;
+
+CALL_METHOD
+    Address("${ORDER_BOOK}")
+    "market_order"
+    Bucket("tokens")
+    Enum<1u8>(
+        Decimal("${STOP_PRICE}")
+    )
+;
+
+CALL_METHOD
+    Address("${ACCOUNT}")
+    "deposit_batch"
+    Expression("ENTIRE_WORKTOP")
+;

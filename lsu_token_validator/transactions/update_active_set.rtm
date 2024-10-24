@@ -1,0 +1,13 @@
+CALL_METHOD
+    Address("{ACCOUNT}")
+    "create_proof_of_amount"
+    Address("{ADMIN_BADGE}")
+    Decimal("1")
+;
+
+CALL_METHOD
+    Address("{LSU_TOKEN_VALIDATOR_COMPONENT}")
+    "update_active_set"
+    Address("{LSU_TOKEN}")
+    true
+;

@@ -1,0 +1,9 @@
+CALL_METHOD
+    Address("${ORDER_BOOK}")
+    "get_ask_limits"
+    Enum<0u8>()
+    Enum<0u8>()
+    Enum<1u8>(
+        50u32
+    )
+;

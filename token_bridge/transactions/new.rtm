@@ -1,0 +1,10 @@
+CALL_FUNCTION
+    Address("package_sim1p5pm0np3h2qvzx6qvr7wpsr6h3enzzhq2nth3vsgutk04keyfh304h")
+    "TokenBridge"
+    "new"
+    Address("resource_sim1ngl6fnp5y2cdw4k4arwzwnhdf0prg2xpxuxqahx27rk40qlrpqatym")
+    Address("resource_sim1tkjxt2hcg483frrsgq58lh4f9zs84ck3zn6mf6pch32c3744pmk0nt")
+    "Babylon FLOOP"
+    "FLOOP"
+    "FLOOP the only token you need!"
+;

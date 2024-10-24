@@ -1,0 +1,23 @@
+CALL_METHOD
+    Address("${ACCOUNT}")
+    "withdraw"
+    Address("${TOKEN}")
+    Decimal("${AMOUNT}")
+;
+TAKE_ALL_FROM_WORKTOP
+    Address("${TOKEN}")
+    Bucket("tokens")
+;
+
+CALL_METHOD
+    Address("${ORDER_BOOK}")
+    "limit_order"
+    Bucket("tokens")
+    Decimal("${PRICE}")
+;
+
+CALL_METHOD
+    Address("${ACCOUNT}")
+    "deposit_batch"
+    Expression("ENTIRE_WORKTOP")
+;

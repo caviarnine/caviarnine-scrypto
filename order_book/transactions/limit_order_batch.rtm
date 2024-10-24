@@ -1,0 +1,47 @@
+CALL_METHOD
+    Address("${ACCOUNT}")
+    "withdraw"
+    Address("${TOKEN}")
+    Decimal("${AMOUNT}")
+;
+
+TAKE_FROM_WORKTOP
+    Address("${TOKEN}")
+    Decimal("${AMOUNT_0}")
+    Bucket("tokens_0")
+;
+TAKE_FROM_WORKTOP
+    Address("${TOKEN}")
+    Decimal("${AMOUNT_1}")
+    Bucket("tokens_1")
+;
+TAKE_FROM_WORKTOP
+    Address("${TOKEN}")
+    Decimal("${AMOUNT_2}")
+    Bucket("tokens_2")
+;
+
+CALL_METHOD
+    Address("${ORDER_BOOK}")
+    "limit_order_batch"
+    Array<Tuple>(
+        Tuple(
+            Bucket("tokens_0"),
+            Decimal("${PRICE_0}")
+        ),
+        Tuple(
+            Bucket("tokens_1"),
+            Decimal("${PRICE_1}")
+        ),
+        Tuple(
+            Bucket("tokens_2"),
+            Decimal("${PRICE_2}")
+        ),
+    )
+;
+
+CALL_METHOD
+    Address("${ACCOUNT}")
+    "deposit_batch"
+    Expression("ENTIRE_WORKTOP")
+;
