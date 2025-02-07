@@ -2,6 +2,7 @@
 .vscode
 .history
 target/
+coverage/
 Cargo.lock
 **/*.rs.bk
 .venv/
