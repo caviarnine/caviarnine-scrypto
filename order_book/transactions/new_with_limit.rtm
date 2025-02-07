@@ -1,0 +1,49 @@
+CALL_METHOD
+    Address("${ACCOUNT}")
+    "withdraw"
+    Address("${TOKEN}")
+    Decimal("${AMOUNT}")
+;
+TAKE_ALL_FROM_WORKTOP
+    Address("${TOKEN}")
+    Bucket("tokens")
+;
+
+ALLOCATE_GLOBAL_ADDRESS
+    Address("${ORDER_BOOK_PACKAGE}")
+    "OrderBook"
+    AddressReservation("order_book_reservation")
+    NamedAddress("order_book_address")
+;
+CALL_FUNCTION
+    Address("${ORDER_BOOK_PACKAGE}")
+    "OrderBook"
+    "new"
+    Enum<2u8>(
+        Enum<0u8>(
+            Enum<0u8>(
+                Enum<1u8>(
+                    Address("${ADMIN_BADGE}")
+                )
+            )
+        )
+    )
+    Enum<0u8>()
+    Address("${TOKEN_X}")
+    Address("${TOKEN_Y}")
+    Enum<1u8>(
+        AddressReservation("order_book_reservation")
+    )
+;
+CALL_METHOD
+    NamedAddress("order_book_address")
+    "limit_order"
+    Bucket("tokens")
+    Decimal("${PRICE}")
+;
+
+CALL_METHOD
+    Address("${ACCOUNT}")
+    "deposit_batch"
+    Expression("ENTIRE_WORKTOP")
+;

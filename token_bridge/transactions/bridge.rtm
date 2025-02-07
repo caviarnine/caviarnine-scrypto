@@ -1,0 +1,20 @@
+CALL_METHOD
+    Address("account_sim1cyfhfs4a94n7kp7k47s55yx685lgwvp2kc6k6tm9kev8qpnlgjea7f")
+    "withdraw"
+    Address("resource_sim1t435s60muy5uw94j0qwet50eyp4sg3w0ctqqx3nxh8a3258rchzks7")
+    Decimal("17")
+;
+TAKE_ALL_FROM_WORKTOP
+    Address("resource_sim1t435s60muy5uw94j0qwet50eyp4sg3w0ctqqx3nxh8a3258rchzks7")
+    Bucket("tokens")
+;
+CALL_METHOD
+    Address("component_sim1cqyd7gjyvt7dmuvxw4u0ry2yehfc7jvs4rjgq28rs7zfa8z263vpzg")
+    "bridge"
+    Bucket("tokens")
+;
+CALL_METHOD
+    Address("account_sim1cyfhfs4a94n7kp7k47s55yx685lgwvp2kc6k6tm9kev8qpnlgjea7f")
+    "deposit_batch"
+    Expression("ENTIRE_WORKTOP")
+;

@@ -1,0 +1,31 @@
+CALL_METHOD
+    Address("${ACCOUNT}")
+    "withdraw_non_fungibles"
+    Address("${ORDER_RECEIPT}")
+    Array<NonFungibleLocalId>(
+        NonFungibleLocalId("${ID_0}"),
+        NonFungibleLocalId("${ID_1}"),
+        NonFungibleLocalId("${ID_2}"),
+    )
+;
+TAKE_NON_FUNGIBLES_FROM_WORKTOP
+    Address("${ORDER_RECEIPT}")
+    Array<NonFungibleLocalId>(
+        NonFungibleLocalId("${ID_0}"),
+        NonFungibleLocalId("${ID_1}"),
+        NonFungibleLocalId("${ID_2}"),
+    )
+    Bucket("order_receipts")
+;
+
+CALL_METHOD
+    Address("${ORDER_BOOK}")
+    "claim_orders"
+    Bucket("order_receipts")
+;
+
+CALL_METHOD
+    Address("${ACCOUNT}")
+    "deposit_batch"
+    Expression("ENTIRE_WORKTOP")
+;

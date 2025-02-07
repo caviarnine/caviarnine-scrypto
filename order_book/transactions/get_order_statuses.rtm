@@ -1,0 +1,9 @@
+CALL_METHOD
+    Address("${ORDER_BOOK}")
+    "get_order_statuses"
+    Array<NonFungibleLocalId>(
+        NonFungibleLocalId("${ID_0}"),
+        NonFungibleLocalId("${ID_1}"),
+        NonFungibleLocalId("${ID_2}"),
+    )
+;
