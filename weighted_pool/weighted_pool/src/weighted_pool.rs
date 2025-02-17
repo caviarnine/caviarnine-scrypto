@@ -35,7 +35,7 @@ mod weighted_pool {
         methods {
             set_protocol_fee_share => restrict_to: [OWNER];
             set_treasury_fee_share => restrict_to: [OWNER];
-
+            
             get_info => PUBLIC;
             get_redemption_value => PUBLIC;
 
@@ -72,7 +72,7 @@ mod weighted_pool {
         /// # Panics
         /// 
         /// * If the weights are not between 0.1 and 0.9
-        /// * If the fee is not between 0.0001 and 0.01
+        /// * If the fee is not between 0.0001 and 0.02
         /// 
         pub fn new(
             resource_x: ResourceAddress,
@@ -81,8 +81,6 @@ mod weighted_pool {
             fee: Decimal,
             reservation: Option<GlobalAddressReservation>,
         ) -> Global<WeightedPool> {
-            let owner_role = OwnerRole::Updatable(rule!(require(OWNER_RESOURCE)));
-
             let (component_reservation, this) = match reservation {
                 Some(reservation) => {
                     let this = Runtime::get_reservation_address(&reservation).try_into().unwrap();
@@ -106,12 +104,35 @@ mod weighted_pool {
             );
 
             let resource_pool = Blueprint::<TwoResourcePool>::instantiate(
-                owner_role.clone(),
+                OwnerRole::Updatable(rule!(require(global_caller(WeightedPool::blueprint_id())))),
                 rule!(require(global_caller(this))),
                 (resource_x, resource_y),
                 None,
             );
             let lp_resource: ResourceAddress = resource_pool.get_metadata::<&str, GlobalAddress>("pool_unit").unwrap().unwrap().try_into().unwrap();
+
+            let resource_x_manager = ResourceManager::from(resource_x);
+            let resource_y_manager = ResourceManager::from(resource_y);
+            let lp_manager = ResourceManager::from_address(lp_resource);
+            let symbol_x: String = resource_x_manager.get_metadata("symbol").unwrap_or_default().unwrap_or_default();
+            let symbol_y: String = resource_y_manager.get_metadata("symbol").unwrap_or_default().unwrap_or_default();
+
+            lp_manager.set_metadata("name", format!("Pool {}/{}", symbol_x, symbol_y));
+            lp_manager.set_metadata("description", format!("Resource pool for the pair {}/{}, with a ratio of {}:{}, and a fee of {}%.", symbol_x, symbol_y, weight_x * 100, weight_y * 100, fee * 100));
+            resource_pool.set_metadata("swap_component", GlobalAddress::from(this));
+            lp_manager.set_metadata("info_url", Url::of("https://www.caviarnine.com/earn/simple-pool"));
+
+            lp_manager.set_metadata("tags", vec!["dex".to_string(), "LP token".to_string()]);
+            lp_manager.set_metadata("symbol", format!("LP"));
+            lp_manager.set_metadata("name", format!("LP {}/{}", symbol_x, symbol_y));
+            lp_manager.set_metadata("description", format!("Liquidity provider token for the pair {}/{}, with a ratio of {}:{}, and a fee of {}%.", symbol_x, symbol_y, weight_x * 100, weight_y * 100, fee * 100));
+            lp_manager.set_metadata("swap_component", GlobalAddress::from(this));
+            lp_manager.set_metadata("icon_url", Url::of("https://www.caviarnine.com/images/simple_pool_lp_icon.png"));
+            lp_manager.set_metadata("info_url", Url::of("https://www.caviarnine.com/earn/simple-pool"));
+
+            resource_pool.set_owner_role(rule!(require(OWNER_RESOURCE)));
+            lp_manager.set_owner_role(rule!(require(OWNER_RESOURCE)));
+
             let fee_vaults: Global<FeeVaults> = Global::from(FEE_VAULTS_COMPONENT);
 
             let pool = Self {
@@ -123,7 +144,7 @@ mod weighted_pool {
                 fee_vaults,
             }
             .instantiate()
-            .prepare_to_globalize(owner_role)
+            .prepare_to_globalize(OwnerRole::Updatable(rule!(require(OWNER_RESOURCE))))
             .roles(roles!(
                 user => rule!(allow_all);
             ))
