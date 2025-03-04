@@ -1,9 +1,13 @@
 [package]
 name = "token_creator"
+build = "build.rs"
 version = "1.0.0"
 edition = "2021"
 
 [dependencies]
+scrypto = { version = "1.2.0" }
+
+[build-dependencies]
 scrypto = { version = "1.2.0" }
 
 [dev-dependencies]
