@@ -12,7 +12,6 @@ scrypto = "1.2.0"
 
 [dev-dependencies]
 scrypto-test = { version = "1.2.0" }
-rand = "0.9.1"
 mock_fee_vaults = { path = "../mock_fee_vaults" }
 mock_lsu_pool = { path = "../mock_lsu_pool" }
 
